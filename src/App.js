@@ -12,20 +12,35 @@ const App = () => {
   useEffect(() => {
     const fetchNews = async () => {
       console.log('Fetching news...');
+      console.log('API Key:', process.env.REACT_APP_NEWSAPI_KEY);
       try {
         const response = await axios.get('https://newsapi.org/v2/top-headlines', {
           params: {
             category: 'technology',
-            language: 'en', // Fetch news in English only
-            apiKey: process.env.REACT_APP_NEWSAPI_KEY, // Use the environment variable
+            language: 'en',
+            apiKey: process.env.REACT_APP_NEWSAPI_KEY,
           },
         });
         console.log('News fetched:', response.data.articles);
         setArticles(response.data.articles);
         setLoading(false);
       } catch (error) {
-        console.error('Error fetching news:', error);
-        setError('Failed to fetch news. Please try again later.');
+        if (error.response) {
+          console.error('Error fetching news:', error.response.data);
+          if (error.response.status === 401) {
+            setError('Unauthorized: Check your API key.');
+          } else if (error.response.status === 426) {
+            setError('Upgrade Required: Check the API documentation.');
+          } else {
+            setError(`Error: ${error.response.statusText}`);
+          }
+        } else if (error.request) {
+          console.error('Error fetching news:', error.request);
+          setError('No response from server. Please try again later.');
+        } else {
+          console.error('Error fetching news:', error.message);
+          setError('Error setting up the request. Please try again.');
+        }
         setLoading(false);
       }
     };
