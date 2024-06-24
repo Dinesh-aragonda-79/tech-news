@@ -4,6 +4,8 @@ import StyledBackground from './components/StyledBackground';
 import NewsItem from './components/NewsItem';
 import './App.css';
 
+const API_KEY = '67df76c6bb3a4c86acb5ee87e191dd5a';
+
 const App = () => {
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -12,13 +14,12 @@ const App = () => {
   useEffect(() => {
     const fetchNews = async () => {
       console.log('Fetching news...');
-      console.log('API Key:', process.env.REACT_APP_NEWSAPI_KEY);
       try {
         const response = await axios.get('https://newsapi.org/v2/top-headlines', {
           params: {
             category: 'technology',
             language: 'en',
-            apiKey: process.env.REACT_APP_NEWSAPI_KEY,
+            apiKey: API_KEY,
           },
         });
         console.log('News fetched:', response.data.articles);
