@@ -4,7 +4,7 @@ import StyledBackground from './components/StyledBackground';
 import NewsItem from './components/NewsItem';
 import './App.css';
 
-const API_KEY = '67df76c6bb3a4c86acb5ee87e191dd5a';
+const API_KEY = 'pub_47202c336260ca2055a96b60c0d2b07bb47e8';
 
 const App = () => {
   const [articles, setArticles] = useState([]);
@@ -15,26 +15,20 @@ const App = () => {
     const fetchNews = async () => {
       console.log('Fetching news...');
       try {
-        const response = await axios.get('https://newsapi.org/v2/top-headlines', {
+        const response = await axios.get('https://newsdata.io/api/1/news', {
           params: {
             category: 'technology',
             language: 'en',
-            apiKey: API_KEY,
+            apikey: API_KEY,
           },
         });
-        console.log('News fetched:', response.data.articles);
-        setArticles(response.data.articles);
+        console.log('News fetched:', response.data.results);
+        setArticles(response.data.results);
         setLoading(false);
       } catch (error) {
         if (error.response) {
           console.error('Error fetching news:', error.response.data);
-          if (error.response.status === 401) {
-            setError('Unauthorized: Check your API key.');
-          } else if (error.response.status === 426) {
-            setError('Upgrade Required: Check the API documentation.');
-          } else {
-            setError(`Error: ${error.response.statusText}`);
-          }
+          setError(`Error: ${error.response.statusText}`);
         } else if (error.request) {
           console.error('Error fetching news:', error.request);
           setError('No response from server. Please try again later.');
