@@ -4,7 +4,7 @@ import StyledBackground from './components/StyledBackground';
 import NewsItem from './components/NewsItem';
 import './App.css';
 
-const API_KEY = 'pub_47202c336260ca2055a96b60c0d2b07bb47e8';
+const API_KEY = '64d3b0f78b4120ee48ea5cef40dad284';
 
 const App = () => {
   const [articles, setArticles] = useState([]);
@@ -15,15 +15,15 @@ const App = () => {
     const fetchNews = async () => {
       console.log('Fetching news...');
       try {
-        const response = await axios.get('https://newsdata.io/api/1/news', {
+        const response = await axios.get('https://gnews.io/api/v4/top-headlines', {
           params: {
             category: 'technology',
-            language: 'en',
-            apikey: API_KEY,
+            lang: 'en',
+            token: API_KEY,
           },
         });
-        console.log('News fetched:', response.data.results);
-        setArticles(response.data.results);
+        console.log('News fetched:', response.data.articles);
+        setArticles(response.data.articles);
         setLoading(false);
       } catch (error) {
         if (error.response) {
